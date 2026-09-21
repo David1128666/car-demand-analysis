@@ -1,0 +1,67 @@
+# Operating system
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Java, Scala, Maven
+target/
+*.class
+*.jar
+.metals/
+.bloop/
+.scala-build/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+backend/class/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Node and frontend
+node_modules/
+frontend/dist/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Generated, runtime, and local data
+checkpoint/
+checkpoints/
+logs/
+*.log
+simulator/data/
+simulator/output/
+jdk17.zip
+*.tmp
+*.temp
+*~
