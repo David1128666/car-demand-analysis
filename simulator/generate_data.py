@@ -85,8 +85,8 @@ def main():
     print("汽车需求数据分析 - 模拟数据生成器")
     print("="*60)
     import os
-    od="D:/final project/simulator/data"
-    os.makedirs(od,exist_ok=True)
+    od = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+    os.makedirs(od, exist_ok=True)
     save_jsonl(gen_behavior(10000),f"{od}/car-user-behavior.json")
     save_jsonl(gen_search(10000),f"{od}/car-search.json")
     save_jsonl(gen_consult(10000),f"{od}/car-consult.json")

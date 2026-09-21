@@ -199,7 +199,7 @@ start_flume() {
         --conf ./conf \
         --conf-file ${FLUME_CONFIG} \
         -Dflume.root.logger=INFO,console \
-        -Dkafka.bootstrap.servers=node1:9092 \
+        -Dkafka.bootstrap.servers=localhost:9092 \
         > ${FLUME_LOG} 2>&1 &
 
     FLUME_PID=$!

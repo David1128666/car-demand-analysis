@@ -51,6 +51,8 @@ car-demand-analysis/
 │   ├── offline-analysis/            # Spark SQL batch analytics
 │   ├── recommendation-engine/       # Recall and ranking pipeline
 │   └── scripts/                     # Build and runtime scripts
+├── sql/                             # Database schema and demo seed data
+├── docker-compose.yml               # MySQL, Kafka, backend, and frontend
 ├── .env.example
 ├── .gitattributes
 ├── .gitignore
@@ -115,10 +117,10 @@ Update the local database and authentication values:
 MYSQL_HOST=localhost
 MYSQL_PORT=3306
 MYSQL_USER=root
-MYSQL_PASSWORD=change-me
+MYSQL_PASSWORD=car_demand_demo
 MYSQL_DATABASE=car_demand_analysis
-SECRET_KEY=replace-with-a-random-secret
-PASSWORD_SALT=replace-with-a-random-salt
+SECRET_KEY=car-demand-demo-secret
+PASSWORD_SALT=car-demand-demo-salt
 ```
 
 Spark module configuration is stored in:
@@ -129,22 +131,63 @@ car-demand-analysis/offline-analysis/src/main/resources/application.conf
 car-demand-analysis/recommendation-engine/src/main/resources/application.conf
 ```
 
-The `root/root` database values in the repository are local development
-defaults only. Never commit real passwords, tokens, database dumps, or personal
-data.
+The included values are demo credentials only. Replace them before deployment,
+and never commit real passwords, tokens, database dumps, or personal data.
 
-## Quick Start
+## One-Command Demo
+
+The fastest way to run the platform is Docker Compose. It starts MySQL, Kafka,
+the FastAPI backend, and the production frontend build:
+
+```bash
+git clone https://github.com/David1128666/car-demand-analysis.git
+cd car-demand-analysis
+docker compose up --build
+```
+
+Wait for the services to become healthy, then open:
+
+```text
+http://localhost:5173
+```
+
+Demo account:
+
+```text
+Username: admin
+Password: admin123
+```
+
+The first startup automatically creates the database schema and loads demo data
+for the dashboard, analytics, market, car, and recommendation pages.
+
+Useful commands:
+
+```bash
+# Stop the services
+docker compose down
+
+# Stop and delete the MySQL volume, then load fresh demo data next time
+docker compose down -v
+
+# View service logs
+docker compose logs -f backend
+```
+
+Kafka is available to host tools at `localhost:9092`. The Spark jobs can be run
+from the host after starting the Docker infrastructure.
+
+## Manual Development Setup
 
 ### 1. Create the database
 
-```sql
-CREATE DATABASE car_demand_analysis
-  DEFAULT CHARACTER SET utf8mb4
-  DEFAULT COLLATE utf8mb4_unicode_ci;
+```powershell
+mysql -uroot -p < sql/schema.sql
+mysql -uroot -p car_demand_analysis < sql/seed.sql
 ```
 
-Create the required realtime, offline, profile, and recommendation tables before
-running the pipeline.
+The scripts create the required realtime, offline, profile, recommendation, and
+market tables. The seed script also creates the `admin / admin123` demo user.
 
 ### 2. Start the backend
 

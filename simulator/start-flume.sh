@@ -9,7 +9,7 @@ CONFIG_DIR="/usr/local/flume"
 CONFIG_FILE="/export/data/BD_project/flume-kafka.conf"
 
 # Kafka Broker地址
-export KAFKA_BROKERS=node1:9092
+export KAFKA_BROKERS=localhost:9092
 
 # 检查Flume是否安装
 check_flume() {
@@ -96,7 +96,7 @@ CONFIG_DIR="/usr/local/flume"
 CONFIG_FILE="/export/data/BD_project/flume-kafka.conf"
 
 # Kafka Broker地址
-export KAFKA_BROKERS=node1:9092
+export KAFKA_BROKERS=localhost:9092
 
 # 检查Flume是否安装
 check_flume() {
@@ -183,7 +183,7 @@ CONFIG_DIR="/usr/local/flume"
 CONFIG_FILE="/export/data/BD_project/flume-kafka.conf"
 
 # Kafka Broker地址
-export KAFKA_BROKERS=node1:9092
+export KAFKA_BROKERS=localhost:9092
 
 # 检查Flume是否安装
 check_flume() {

@@ -92,6 +92,16 @@ The recommendation pipeline uses:
 
 ### 7. Local Setup
 
+The fastest demo startup is:
+
+```bash
+docker compose up --build
+```
+
+This starts MySQL, Kafka, the FastAPI backend, and the Vue frontend. Open
+`http://localhost:5173` and use `admin / admin123`. Database schema and demo data
+are initialized automatically.
+
 Requirements:
 
 - JDK 11 and Maven 3.8+
@@ -246,6 +256,16 @@ MySQL。
 4. **加权排序**：协同过滤 0.5、内容推荐 0.3、热门推荐 0.2。
 
 ### 7. 本地运行
+
+最快的演示启动方式是：
+
+```bash
+docker compose up --build
+```
+
+该命令会启动 MySQL、Kafka、FastAPI 后端和 Vue 前端。访问
+`http://localhost:5173`，使用 `admin / admin123` 登录。数据库结构和演示数据
+会自动初始化。
 
 环境要求：
 
