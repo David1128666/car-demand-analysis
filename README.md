@@ -1,42 +1,56 @@
-# 基于多源数据行为的汽车需求挖掘与推荐平台
+# Multi-source Car Demand Mining and Recommendation Platform
 
-一个面向汽车用户行为与市场数据的分析与推荐项目，包含 Vue 3 前端、
-FastAPI 后端、模拟数据生成器、Spark 实时/离线分析任务，以及基于多路召回的
-推荐引擎。
+A full-stack platform for analyzing car demand from user behavior, search,
+consultation, quotation, and loan-inquiry data. The system combines a Vue 3
+frontend, a FastAPI backend, Spark batch and streaming jobs, and a multi-recall
+recommendation engine.
 
-## 功能模块
+The frontend supports English and Simplified Chinese and stores the selected
+language in the browser.
 
-- **数据大屏与后台管理**：展示用户行为、搜索、咨询、报价和贷款等业务指标。
-- **实时分析**：通过 Spark Structured Streaming 消费 Kafka 数据并写入 MySQL。
-- **离线分析**：通过 Spark SQL 完成趋势、用户画像、车型偏好和日统计等任务。
-- **推荐引擎**：结合 ALS 协同过滤、内容召回和热门召回生成推荐结果。
-- **数据模拟器**：生成用户行为、搜索、咨询、报价和贷款等模拟数据。
+## Features
 
-## 技术栈
+- **Dashboard**: page views, unique visitors, searches, consultations,
+  favorites, car inventory, quotation, and loan metrics.
+- **Analytics**: car type preference, brand consultation conversion, loan
+  approval, daily trends, and recommendation performance.
+- **Market insights**: brand preference, market share, search keywords, fuel
+  trends, price changes, price wars, promotions, and discount tiers.
+- **Car search**: filtering and pagination for brands, car types, fuel types,
+  prices, and detailed car records.
+- **Recommendations**: ALS collaborative filtering, content-based recall,
+  popularity recall, weighted ranking, and user-level recommendation views.
+- **Administration**: user management, database monitoring, data freshness,
+  system configuration, operation logs, and car management.
+- **Data simulator**: synthetic event generation and delivery to Kafka through
+  Flume.
 
-| 层级 | 技术 |
-|------|------|
-| 前端 | Vue 3、Vite、Pinia、Vue Router、Axios、ECharts |
-| 后端 | Python 3.11、FastAPI、PyMySQL |
-| 实时计算 | Apache Spark Structured Streaming、Apache Kafka、Flume |
-| 离线计算 | Apache Spark SQL |
-| 推荐 | Apache Spark MLlib、ALS、多路召回与排序 |
-| 存储 | MySQL 8.0 |
-| 构建 | Maven 3.8+、Scala 2.13.14、JDK 11 |
+## Technology Stack
 
-## 项目结构
+| Layer | Technology |
+|-------|------------|
+| Frontend | Vue 3, Vite, Pinia, Vue Router, Axios, ECharts, Lucide |
+| Internationalization | Custom English and Simplified Chinese dictionaries |
+| Backend | Python 3.11, FastAPI, PyMySQL |
+| Streaming | Apache Spark Structured Streaming, Apache Kafka, Flume |
+| Batch analytics | Apache Spark SQL |
+| Recommendation | Apache Spark MLlib, ALS, content recall, popularity recall |
+| Storage | MySQL 8.0 |
+| Build | Maven 3.8+, Scala 2.13.14, JDK 11 |
+
+## Repository Layout
 
 ```text
-基于多源数据行为的汽车需求挖掘与推荐平台/
-├── backend/                         # FastAPI 后端服务
-├── frontend/                        # Vue 3 前端
-├── simulator/                       # Flume/Kafka 模拟数据生成与发送
-├── car-demand-analysis/             # Scala Maven 多模块工程
-│   ├── common/                      # 公共模型、配置与工具
+car-demand-analysis/
+├── backend/                         # FastAPI service
+├── frontend/                        # Vue 3 application
+├── simulator/                       # Synthetic data and Flume/Kafka pipeline
+├── car-demand-analysis/             # Scala Maven multi-module project
+│   ├── common/                      # Shared models, configuration, utilities
 │   ├── realtime-analysis/           # Kafka -> Spark -> MySQL
-│   ├── offline-analysis/            # Spark SQL 离线分析
-│   ├── recommendation-engine/       # 推荐召回与排序
-│   └── scripts/                     # 构建与运行脚本
+│   ├── offline-analysis/            # Spark SQL batch analytics
+│   ├── recommendation-engine/       # Recall and ranking pipeline
+│   └── scripts/                     # Build and runtime scripts
 ├── .env.example
 ├── .gitattributes
 ├── .gitignore
@@ -44,51 +58,58 @@ FastAPI 后端、模拟数据生成器、Spark 实时/离线分析任务，以�
 └── README.md
 ```
 
-## 数据流
+## Data Flow
 
 ```text
-数据模拟器 / Flume
-        │
-        ▼
-Kafka Topics
+Synthetic data generator / Flume
+              |
+              v
+          Kafka Topics
   ├── car-user-behavior
   ├── car-search
   ├── car-consult
   ├── car-price-quote
   └── car-loan-inquiry
-        │
-        ▼
+              |
+              v
 Spark Structured Streaming
-        │
-        ▼
-      MySQL
-        │
-  ┌─────┼──────────┐
-  ▼     ▼          ▼
-实时统计 离线分析 推荐引擎
-  │     │          │
-  └─────┼──────────┘
-        ▼
-   FastAPI 接口
-        │
-        ▼
-   Vue 3 前端
+              |
+              v
+            MySQL
+              |
+      ┌───────┼──────────┐
+      v       v          v
+ Realtime  Offline   Recommendation
+ Analytics Analytics     Engine
+      |       |          |
+      └───────┼──────────┘
+              v
+         FastAPI API
+              |
+              v
+        Vue 3 Frontend
 ```
 
-## 环境要求
+## Requirements
 
 - JDK 11
 - Maven 3.8+
 - Python 3.11+
-- Node.js 18+（推荐 20 LTS）
+- Node.js 18+ (20 LTS recommended)
 - MySQL 8.0+
 - Apache Kafka 3.x
-- Apache Flume 1.11（模拟器发送数据时需要）
-- Apache Spark 3.3.1（运行 Spark 任务时需要）
+- Apache Flume 1.11 for simulator delivery
+- Apache Spark 3.3.1 for Spark jobs
 
-## 配置
+## Configuration
 
-复制根目录 `.env.example` 为 `.env`，并修改本地数据库账号：
+Copy the environment template:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Update the local database and authentication values:
 
 ```text
 MYSQL_HOST=localhost
@@ -100,7 +121,7 @@ SECRET_KEY=replace-with-a-random-secret
 PASSWORD_SALT=replace-with-a-random-salt
 ```
 
-各 Spark 模块的 Kafka、MySQL 和检查点配置位于：
+Spark module configuration is stored in:
 
 ```text
 car-demand-analysis/realtime-analysis/src/main/resources/application.conf
@@ -108,14 +129,13 @@ car-demand-analysis/offline-analysis/src/main/resources/application.conf
 car-demand-analysis/recommendation-engine/src/main/resources/application.conf
 ```
 
-仓库中的 `root/root` 仅为本地开发默认值。运行前请修改为自己的数据库账号，
-且不要将真实密码、Token、数据库备份或生产数据提交到 Git。
+The `root/root` database values in the repository are local development
+defaults only. Never commit real passwords, tokens, database dumps, or personal
+data.
 
-## 快速开始
+## Quick Start
 
-### 1. 初始化数据库
-
-创建数据库：
+### 1. Create the database
 
 ```sql
 CREATE DATABASE car_demand_analysis
@@ -123,11 +143,12 @@ CREATE DATABASE car_demand_analysis
   DEFAULT COLLATE utf8mb4_unicode_ci;
 ```
 
-按业务需要准备实时统计、离线分析、用户画像和推荐结果等业务表。
+Create the required realtime, offline, profile, and recommendation tables before
+running the pipeline.
 
-### 2. 启动后端
+### 2. Start the backend
 
-在项目根目录执行：
+From the repository root:
 
 ```powershell
 Copy-Item .env.example .env
@@ -138,9 +159,9 @@ pip install -r requirements.txt
 uvicorn main:app --reload --env-file ..\.env --host 0.0.0.0 --port 8000
 ```
 
-后端接口文档默认位于 `http://localhost:8000/docs`。
+API documentation is available at `http://localhost:8000/docs`.
 
-### 3. 启动前端
+### 3. Start the frontend
 
 ```powershell
 cd frontend
@@ -148,15 +169,16 @@ npm install
 npm run dev
 ```
 
-前端开发服务默认由 Vite 提供，运行时请确保后端地址配置正确。
+The default language is English. Use the language button in the navigation to
+switch to Simplified Chinese.
 
-### 4. 构建 Scala 模块
+### 4. Build the Scala modules
 
 ```powershell
 mvn -f car-demand-analysis/pom.xml clean package -DskipTests
 ```
 
-也可以使用脚本：
+Runtime scripts:
 
 ```bash
 ./car-demand-analysis/scripts/build-all.sh
@@ -165,7 +187,7 @@ mvn -f car-demand-analysis/pom.xml clean package -DskipTests
 ./car-demand-analysis/scripts/run-recommendation.sh
 ```
 
-### 5. 启动模拟数据
+### 5. Start the simulator
 
 ```bash
 cd simulator
@@ -174,37 +196,37 @@ chmod +x simulatorctl.sh send_data.sh
 ./simulatorctl.sh start
 ```
 
-模拟数据目录属于运行产物，不会提交到 Git；需要时可通过
-`simulator/generate_data.py` 重新生成。
+Generated simulator data is treated as runtime output and is excluded from Git.
+Run `simulator/generate_data.py` to recreate it when needed.
 
 ## Kafka Topics
 
-| Topic | 说明 |
-|-------|------|
-| `car-user-behavior` | 用户浏览、收藏、对比等行为 |
-| `car-search` | 用户搜索行为 |
-| `car-consult` | 车型咨询行为 |
-| `car-price-quote` | 车型报价与优惠数据 |
-| `car-loan-inquiry` | 贷款咨询数据 |
+| Topic | Description |
+|-------|-------------|
+| `car-user-behavior` | Browsing, favorites, comparison, and related behavior |
+| `car-search` | Search events |
+| `car-consult` | Car consultation events |
+| `car-price-quote` | Quotation and discount events |
+| `car-loan-inquiry` | Loan inquiry events |
 
-## 主要输出表
+## Main Output Tables
 
-| 表名 | 来源 | 说明 |
-|------|------|------|
-| `realtime_stats` | 实时分析 | 用户行为实时统计 |
-| `realtime_price_stats` | 实时分析 | 报价与折扣统计 |
-| `realtime_loan_stats` | 实时分析 | 贷款申请统计 |
-| `search_log` | 实时分析 | 热门搜索记录 |
-| `operation_log` | 实时分析 | 咨询跟进与操作记录 |
-| `daily_stats` | 离线分析 | 日报和趋势统计 |
-| `user_profile` | 离线分析 | 用户画像 |
-| `recommendation` | 推荐引擎 | 推荐结果 |
+| Table | Source | Description |
+|-------|--------|-------------|
+| `realtime_stats` | Realtime analytics | User behavior statistics |
+| `realtime_price_stats` | Realtime analytics | Quotation and discount statistics |
+| `realtime_loan_stats` | Realtime analytics | Loan inquiry statistics |
+| `search_log` | Realtime analytics | Popular search records |
+| `operation_log` | Realtime analytics | Consultation and operation records |
+| `daily_stats` | Offline analytics | Daily trend statistics |
+| `user_profile` | Offline analytics | User preference profiles |
+| `recommendation` | Recommendation engine | Ranked recommendation results |
 
-## 相关文档
+## Documentation
 
-- `simulator/README.md`
-- `car-demand-analysis/scripts/项目功能说明与使用文档.md`
+- [Simulator guide](simulator/README.md)
+- [Project features and usage](car-demand-analysis/scripts/Project-Features-and-Usage.md)
 
 ## License
 
-本项目使用 [MIT License](LICENSE)。
+This project is released under the [MIT License](LICENSE).

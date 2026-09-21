@@ -1,20 +1,61 @@
 <template>
-  <div v-if="route.name === 'Login'" class="login-page"><router-view /></div>
+  <div v-if="route.name === 'Login'" class="login-page">
+    <button
+      class="language-floating"
+      type="button"
+      :title="t('app.languageSwitch')"
+      @click="toggleLocale"
+    >
+      <Languages :size="15" />
+      {{ localeLabel }}
+    </button>
+    <router-view />
+  </div>
   <div v-else>
     <aside class="sidebar">
-      <div class="logo">🚗 汽车需求分析</div>
+      <div class="logo">
+        <CarFront :size="17" />
+        <span>{{ t("app.logo") }}</span>
+      </div>
       <nav>
-        <router-link to="/"><span class="nav-icon">📊</span><span>数据大屏</span></router-link>
-        <router-link to="/analysis"><span class="nav-icon">📈</span><span>数据分析</span></router-link>
-        <router-link to="/market"><span class="nav-icon">🔍</span><span>市场洞察</span></router-link>
-        <router-link to="/cars"><span class="nav-icon">🚙</span><span>车型查询</span></router-link>
-        <router-link to="/recommendations"><span class="nav-icon">🎯</span><span>智能推荐</span></router-link>
-        <router-link v-if="auth.user?.role === 'admin'" to="/admin"><span class="nav-icon">⚙️</span><span>后台管理</span></router-link>
+        <router-link to="/">
+          <LayoutDashboard :size="15" />
+          <span>{{ t("nav.dashboard") }}</span>
+        </router-link>
+        <router-link to="/analysis">
+          <ChartLine :size="15" />
+          <span>{{ t("nav.analysis") }}</span>
+        </router-link>
+        <router-link to="/market">
+          <Search :size="15" />
+          <span>{{ t("nav.market") }}</span>
+        </router-link>
+        <router-link to="/cars">
+          <Car :size="15" />
+          <span>{{ t("nav.cars") }}</span>
+        </router-link>
+        <router-link to="/recommendations">
+          <Target :size="15" />
+          <span>{{ t("nav.recommendations") }}</span>
+        </router-link>
+        <router-link v-if="auth.user?.role === 'admin'" to="/admin">
+          <Settings :size="15" />
+          <span>{{ t("nav.admin") }}</span>
+        </router-link>
       </nav>
       <div class="user-bar">
         <div class="name">{{ auth.user?.nickname || auth.user?.username }}</div>
-        <div class="role">{{ auth.user?.role }}</div>
-        <button @click="auth.logout()">退出</button>
+        <div class="role">{{ roleLabel }}</div>
+        <div class="user-actions">
+          <button type="button" :title="t('app.languageSwitch')" @click="toggleLocale">
+            <Languages :size="13" />
+            {{ localeLabel }}
+          </button>
+          <button type="button" @click="auth.logout()">
+            <LogOut :size="13" />
+            {{ t("app.logout") }}
+          </button>
+        </div>
       </div>
     </aside>
     <div class="main">
@@ -24,8 +65,26 @@
 </template>
 
 <script setup>
+import {
+  Car,
+  CarFront,
+  ChartLine,
+  Languages,
+  LayoutDashboard,
+  LogOut,
+  Search,
+  Settings,
+  Target,
+} from "@lucide/vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
+
+import { localeLabel, t, toggleLocale } from "./i18n";
 import { useAuthStore } from "./stores/auth";
+
 const route = useRoute();
 const auth = useAuthStore();
+const roleLabel = computed(() =>
+  auth.user?.role === "admin" ? t("app.role.admin") : t("app.role.user"),
+);
 </script>

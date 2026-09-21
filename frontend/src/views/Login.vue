@@ -60,8 +60,8 @@
             </svg>
           </div>
           <div class="brand-text">
-            <h1 class="project-title">基于多源行为数据的汽车需求挖掘与推荐系统</h1>
-            <div class="welcome-badge">WELCOME</div>
+            <h1 class="project-title">{{ t("login.projectTitle") }}</h1>
+            <div class="welcome-badge">{{ t("login.welcome") }}</div>
           </div>
         </div>
       </div>
@@ -70,11 +70,11 @@
       <div class="form-panel">
         <div class="form-inner">
           <template v-if="!showReg">
-            <h2 class="form-title">用户登录</h2>
-            <p class="form-subtitle">登录以访问汽车需求分析平台</p>
+            <h2 class="form-title">{{ t("login.loginTitle") }}</h2>
+            <p class="form-subtitle">{{ t("login.loginSubtitle") }}</p>
             <input
               v-model="form.username"
-              placeholder="请输入用户名"
+              :placeholder="t('login.usernamePlaceholder')"
               class="form-input"
               @keyup.enter="doLogin"
               autocomplete="username"
@@ -82,7 +82,7 @@
             <input
               v-model="form.password"
               type="password"
-              placeholder="请输入密码"
+              :placeholder="t('login.passwordPlaceholder')"
               class="form-input"
               @keyup.enter="doLogin"
               autocomplete="current-password"
@@ -90,33 +90,47 @@
             <div v-if="msg" class="form-msg" :class="msgOk ? 'msg-success' : 'msg-error'">{{ msg }}</div>
             <button type="button" class="form-btn" @click="doLogin" :disabled="busy">
               <span v-if="busy" class="btn-spinner"></span>
-              {{ busy ? '登录中...' : '登 录' }}
+              {{ busy ? t("login.loggingIn") : t("login.login") }}
             </button>
-            <p class="switch-tip">还没有账号？<a href="#" @click.prevent="switchToReg">立即注册</a></p>
+            <p class="switch-tip">
+              {{ t("login.noAccount") }}
+              <a href="#" @click.prevent="switchToReg">{{ t("login.registerNow") }}</a>
+            </p>
           </template>
 
           <template v-else>
-            <h2 class="form-title">账号注册</h2>
-            <p class="form-subtitle">创建账号以使用完整功能</p>
-            <input v-model="form.username" placeholder="请输入用户名" class="form-input" />
-            <input v-model="form.nickname" placeholder="请输入昵称" class="form-input" />
+            <h2 class="form-title">{{ t("login.registerTitle") }}</h2>
+            <p class="form-subtitle">{{ t("login.registerSubtitle") }}</p>
+            <input
+              v-model="form.username"
+              :placeholder="t('login.usernamePlaceholder')"
+              class="form-input"
+            />
+            <input
+              v-model="form.nickname"
+              :placeholder="t('login.nicknamePlaceholder')"
+              class="form-input"
+            />
             <input
               v-model="form.password"
               type="password"
-              placeholder="请输入密码（至少6位字母或数字）"
+              :placeholder="t('login.passwordHint')"
               class="form-input"
             />
             <div v-if="msg" class="form-msg" :class="msgOk ? 'msg-success' : 'msg-error'">{{ msg }}</div>
             <button type="button" class="form-btn" @click="doReg" :disabled="busy">
               <span v-if="busy" class="btn-spinner"></span>
-              {{ busy ? '注册中...' : '注 册' }}
+              {{ busy ? t("login.registering") : t("login.register") }}
             </button>
-            <p class="switch-tip">已有账号？<a href="#" @click.prevent="switchToLogin">返回登录</a></p>
+            <p class="switch-tip">
+              {{ t("login.haveAccount") }}
+              <a href="#" @click.prevent="switchToLogin">{{ t("login.backToLogin") }}</a>
+            </p>
           </template>
         </div>
       </div>
     </div>
-    <p class="demo-hint">演示账号：admin / admin123</p>
+    <p class="demo-hint">{{ t("login.demoHint") }}</p>
   </div>
 </template>
 
@@ -124,6 +138,7 @@
 import { reactive, ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth";
+import { t } from "../i18n";
 
 const auth = useAuthStore();
 const router = useRouter();
@@ -147,7 +162,7 @@ function switchToLogin() {
 
 async function doLogin() {
   if (!form.username || !form.password) {
-    msg.value = "请输入用户名和密码";
+    msg.value = t("login.required");
     msgOk.value = false;
     return;
   }
@@ -158,12 +173,12 @@ async function doLogin() {
     if (result.success) {
       router.push("/");
     } else {
-      msg.value = result.message || "用户名或密码错误";
+      msg.value = result.message || t("login.invalid");
       msgOk.value = false;
     }
   } catch (e) {
     console.error(e);
-    msg.value = e.message || "登录失败，请检查后端服务是否开启";
+    msg.value = t("login.loginFailed");
     msgOk.value = false;
   }
   busy.value = false;
@@ -171,17 +186,17 @@ async function doLogin() {
 
 async function doReg() {
   if (!form.username || !form.password) {
-    msg.value = "用户名和密码不能为空";
+    msg.value = t("login.usernamePasswordRequired");
     msgOk.value = false;
     return;
   }
   if (form.password.length < 6) {
-    msg.value = "密码长度不能少于6位字母或数字";
+    msg.value = t("login.passwordLength");
     msgOk.value = false;
     return;
   }
   if (!/^[a-zA-Z0-9]+$/.test(form.password)) {
-    msg.value = "密码只能包含字母和数字";
+    msg.value = t("login.passwordCharset");
     msgOk.value = false;
     return;
   }
@@ -191,15 +206,15 @@ async function doReg() {
     const res = await auth.register(form.username, form.password, form.nickname);
     if (res.code === 200 && res.data?.success) {
       showReg.value = false;
-      msg.value = "注册成功，请登录";
+      msg.value = t("login.registerSuccess");
       msgOk.value = true;
     } else {
-      msg.value = res.data?.message || "注册失败，请重试";
+      msg.value = t("login.registerFailed");
       msgOk.value = false;
     }
   } catch (e) {
     console.error(e);
-    msg.value = e.message || "注册失败，请检查后端服务是否开启";
+    msg.value = t("login.registerServiceFailed");
     msgOk.value = false;
   }
   busy.value = false;

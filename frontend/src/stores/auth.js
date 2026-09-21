@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import api from "../api";
+import { apiMessage, t } from "../i18n";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref(JSON.parse(localStorage.getItem("user") || "null"));
@@ -16,9 +17,12 @@ export const useAuthStore = defineStore("auth", () => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         return { success: true };
       }
-      return { success: false, message: res.data?.message || "登录失败" };
+      return {
+        success: false,
+        message: apiMessage(res.data?.message, "login.invalid"),
+      };
     } catch (e) {
-      return { success: false, message: e.message || "网络错误，请检查后端服务" };
+      return { success: false, message: t("login.loginFailed") };
     }
   }
 
@@ -26,7 +30,7 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       return await api.post("/auth/register", { username, password, nickname });
     } catch (e) {
-      throw new Error(e.message || "注册失败，请检查后端服务");
+      throw new Error(t("login.registerServiceFailed"));
     }
   }
 
