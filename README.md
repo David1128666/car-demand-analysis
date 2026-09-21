@@ -227,6 +227,16 @@ Run `simulator/generate_data.py` to recreate it when needed.
 - [Simulator guide](simulator/README.md)
 - [Project features and usage](car-demand-analysis/scripts/Project-Features-and-Usage.md)
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development, verification, and
+documentation requirements.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for vulnerability reporting and secret-handling
+guidance. Never commit real credentials or personal data.
+
 ## License
 
 This project is released under the [MIT License](LICENSE).
